@@ -14,14 +14,15 @@ const POSTS = [
   { id: 8, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400', stacked: true },
 ];
 
+
 // Profile + header info
 const PROFILE = {
   name: 'John Doe',
   username: 'John_doe',
   bio: 'Better things are coming !!',
   link: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400',
-  avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtdzpWHr2RzAFyCimnkR2oNnuwwn7RaqYEw&s',
-  headerImage:"https://static.vecteezy.com/system/resources/previews/007/755/662/large_2x/closeup-of-nature-yellow-flower-on-blue-sky-background-under-sunlight-with-bokeh-and-copy-space-using-as-background-natural-plants-landscape-ecology-cover-page-concept-free-photo.jpg",
+  avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkuVH6pKXz_n5AOPV0ojOYC1Ukl288sngg_w&s',
+  headerImage:"https://previews.123rf.com/images/jakkapan/jakkapan1807/jakkapan180700040/105086249-vintage-photo-of-autumn-tree-with-blue-sky-nature-background-of-fall-season-vintage-colour-tone.jpg",
   stats: [
     { label: 'Posts', value: POSTS.length },
     { label: 'Followers', value: '12K' },
