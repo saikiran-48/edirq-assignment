@@ -1,4 +1,5 @@
-import { AntDesign, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import { HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT, HEADER_SCROLL_DISTANCE, IMAGE_SIZE, POSTS, PROFILE, TABS } from '@/constants/data';
+import { AntDesign, Feather, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
 import React, { memo, useRef, useState } from 'react';
 import {
   Animated,
@@ -10,57 +11,10 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
-/* -------------------------------------------------------
-   CONSTANTS + STATIC DATA
-   ------------------------------------------------------- */
-
-// Tabs shown inside the sticky tab bar
-const TABS = ['Posts', 'Clips', 'Tagged'];
-
-// Posts for the grid
-const POSTS = [
-  { id: 1, image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400', bookmarked: true },
-  { id: 2, image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400', stacked: true },
-  { id: 3, image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400', bookmarked: true },
-  { id: 4, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400', stacked: true },
-  { id: 5, image: 'https://images.unsplash.com/photo-1504851149312-7a075b496cc7?w=400' },
-  { id: 6, image: 'https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=400', stacked: true },
-  { id: 7, image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400' },
-  { id: 8, image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400', stacked: true },
-];
-
-// Profile + header info
-const PROFILE = {
-  name: 'Joy Alexander',
-  username: 'J_Jay',
-  bio: 'Better things are coming !!',
-  link: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400',
-  avatar: 'https://i.pravatar.cc/150?img=47',
-  headerImage:
-    'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400',
-  stats: [
-    { label: 'Posts', value: POSTS.length },
-    { label: 'Followers', value: '12K' },
-    { label: 'Following', value: '2K' },
-  ],
-};
-
-
-
-// Layout constants
 const { width } = Dimensions.get('window');
-const HEADER_MAX_HEIGHT = 280;
-const HEADER_MIN_HEIGHT = Platform.OS === 'ios' ? 90 : 70;
-const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
-const IMAGE_SIZE = (width - 48) / 2;
-
-/* -------------------------------------------------------
-   HEADER COMPONENT
-   ------------------------------------------------------- */
-
 type HeaderProps = {
   headerHeight: Animated.AnimatedInterpolation<string | number>;
   headerImageOpacity: Animated.AnimatedInterpolation<number>;
@@ -68,9 +22,6 @@ type HeaderProps = {
   headerTitleOpacity: Animated.AnimatedInterpolation<number>;
 };
 
-/**
- * Top parallax header with animated image + fading title
- */
 const Header = memo(
   ({
     headerHeight,
@@ -79,7 +30,6 @@ const Header = memo(
     headerTitleOpacity,
   }: HeaderProps) => (
     <Animated.View style={[styles.header, { height: headerHeight }]}>
-      {/* Background Image */}
       <Animated.Image
         source={{ uri: PROFILE.headerImage }}
         style={[
@@ -87,17 +37,12 @@ const Header = memo(
           { opacity: headerImageOpacity},
         ]}
         resizeMode="cover"
-        onError={() => {
-          // fallback to a default image if needed
-        }}
       />
 
-      {/* Dark overlay for readability */}
       <Animated.View
         style={[styles.headerOverlay, { opacity: headerImageOpacity }]}
       />
 
-      {/* Title visible only when scrolled */}
       <Animated.View
         style={[styles.headerTitleContainer, { opacity: headerTitleOpacity }]}
       >
@@ -107,19 +52,17 @@ const Header = memo(
       {/* Top-right action icons */}
       <View style={styles.headerIcons}>
         <TouchableOpacity style={styles.iconButton}>
-          <Text style={styles.iconText}>⚙️</Text>
+        <Feather name="settings" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.iconButton}>
-          <Text style={styles.iconText}>⋮⋮</Text>
+          <AntDesign name="qrcode" size={24} color="black" />
         </TouchableOpacity>
       </View>
     </Animated.View>
   )
 );
 
-/* -------------------------------------------------------
-   STICKY TAB BAR
-   ------------------------------------------------------- */
+  //  STICKY TAB BAR
 
 type StickyTabsProps = {
   activeTab: string;
@@ -127,9 +70,6 @@ type StickyTabsProps = {
   postTabHeight: Animated.AnimatedInterpolation<string | number>;
 };
 
-/**
- * Sticky tab bar that locks under header and stays visible
- */
 const StickyTabs = memo(
   ({ activeTab, setActiveTab, postTabHeight }: StickyTabsProps) => (
     <Animated.View style={[styles.stickyTabBar, { top: postTabHeight }]}>
@@ -158,16 +98,10 @@ const StickyTabs = memo(
   )
 );
 
-/* -------------------------------------------------------
-   PROFILE SECTION
-   ------------------------------------------------------- */
+  //  PROFILE SECTION
 
-/**
- * User profile block: avatar, bio, link, stats
- */
 const ProfileSection = memo(() => (
   <View style={styles.profileSection}>
-    {/* Top row: avatar + user info */}
     <View style={styles.profileHeader}>
       <Image source={{ uri: PROFILE.avatar }} style={styles.avatar} />
 
@@ -219,18 +153,12 @@ const ProfileSection = memo(() => (
   </View>
 ));
 
-/* -------------------------------------------------------
-   PHOTO GRID ITEM
-   ------------------------------------------------------- */
+  //  PHOTO GRID ITEM
 
-/**
- * A single post tile in the grid
- */
 const PhotoItem = memo(({ item }: { item: any }) => (
   <View style={[styles.photoContainer, { width: IMAGE_SIZE, height: IMAGE_SIZE }]}>
     <Image source={{ uri: item.image }} style={styles.photo} />
 
-    {/* Post badges */}
     {item.bookmarked && (
       <View style={styles.iconBadge}>
   <AntDesign name="pushpin" size={24} color="white" />
@@ -267,7 +195,7 @@ export default function ParallaxProfileScreen() {
   const postTabHeight = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
     outputRange: [
-      HEADER_MAX_HEIGHT + HEADER_SCROLL_DISTANCE + 28,
+      HEADER_MAX_HEIGHT + HEADER_SCROLL_DISTANCE  + 90 ,
       HEADER_MIN_HEIGHT,
     ],
     extrapolate: 'clamp',
@@ -306,12 +234,8 @@ export default function ParallaxProfileScreen() {
     extrapolate: 'clamp',
   });
 
-  // Filter posts by tab
   const filteredPosts = activeTab === 'Posts' ? POSTS : [];
 
-  /* -------------------------------------------------------
-     RENDER
-     ------------------------------------------------------- */
 
   return (
     <SafeAreaView style={styles.container}>
@@ -370,9 +294,7 @@ export default function ParallaxProfileScreen() {
   );
 }
 
-/* -------------------------------------------------------
-   STYLES
-   ------------------------------------------------------- */
+  //  STYLES
 
 const styles = StyleSheet.create({
   container: {
@@ -388,10 +310,10 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 10,
     overflow: 'hidden',
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#ffffffff',
   },
   headerBackground: {
-    width,
+    width: width,
     height: HEADER_MAX_HEIGHT,
     position: 'absolute',
   },
@@ -406,17 +328,17 @@ const styles = StyleSheet.create({
   headerTitleText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: '#000000',
   },
   headerIcons: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 10,
+    top: Platform.OS === 'ios' ? 60 : 30,
     right: 16,
     flexDirection: 'row',
     gap: 12,
   },
   iconButton: {
-    width: 40,
+    width: 50,
     height: 40,
     borderRadius: 20,
     backgroundColor: 'rgba(255,255,255,0.9)',

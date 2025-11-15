@@ -62,7 +62,6 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarIcon: ({ focused }) => (
-            // center/floating-style plus button: show tinted background when active
             <View
               style={{
                 width: 36,
@@ -77,7 +76,6 @@ export default function TabLayout() {
                 elevation: focused ? 6 : 0,
               }}
             >
-              {/* If your PlusButton accepts a color/fill prop, pass it. If not, this still wraps it. */}
               <PlusButton />
             </View>
           ),
